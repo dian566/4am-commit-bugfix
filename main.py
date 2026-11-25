@@ -21,10 +21,16 @@ def main() -> None:
         f"entry is {len(ENTRY)} chars, expected {EXPECTED_CHARS}"
     )
     assert "\n" not in ENTRY, "entry must be a single line"
+    # Gate parity with the bounty scorer: UTF-8 text, 1-200 chars, not blank.
+    encoded = ENTRY.encode("utf-8")
+    assert 1 <= len(ENTRY) <= 200, (
+        f"entry is {len(ENTRY)} chars, gate allows 1-200"
+    )
+    assert ENTRY.strip(), "entry must not be only whitespace"
     output_path = os.environ.get("OUTPUT_PATH", "/output/entry.txt")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "wb") as f:
-        f.write(ENTRY.encode("utf-8"))
+        f.write(encoded)
 
 
 if __name__ == "__main__":
